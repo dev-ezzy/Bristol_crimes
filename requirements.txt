@@ -1,0 +1,5 @@
+# Only needed for LOCAL testing of the ingestion logic.
+# In Fabric/Databricks, requests and pyspark are pre-installed on the runtime.
+requests>=2.31
+pyspark>=3.5
+delta-spark>=3.0

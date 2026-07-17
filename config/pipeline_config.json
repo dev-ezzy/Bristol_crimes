@@ -1,0 +1,61 @@
+{
+  "_comment_general": "Single source of truth for all pipeline parameters. Change values here, never hardcode in notebooks. This is what 'parameterised pipelines' means in the job spec.",
+
+  "api": {
+    "base_url": "https://data.police.uk/api/crimes-street/all-crime",
+    "_comment_api": "UK Police street level crime endpoint. No auth needed. Returns [] for months with no data yet (data lags ~2 months behind current date).",
+    "request_timeout_seconds": 60,
+    "max_retries": 3,
+    "retry_backoff_seconds": 5
+  },
+
+  "bristol": {
+    "_comment_points": "The API takes a single lat/lng and returns crimes within a 1 mile radius. One point cannot cover all of Bristol, so we query a grid of points covering the city and deduplicate on the crime id afterwards. These 6 points cover central Bristol plus the main outer areas.",
+    "query_points": [
+      {"name": "city_centre",   "lat": 51.4545, "lng": -2.5879},
+      {"name": "clifton",       "lat": 51.4630, "lng": -2.6110},
+      {"name": "bedminster",    "lat": 51.4400, "lng": -2.6000},
+      {"name": "easton",        "lat": 51.4620, "lng": -2.5570},
+      {"name": "horfield",      "lat": 51.4880, "lng": -2.5800},
+      {"name": "brislington",   "lat": 51.4380, "lng": -2.5440}
+    ]
+  },
+
+  "ingestion": {
+    "_comment_months": "How many past months to backfill on first run. Police data is published roughly 2 months in arrears, so we start from 2 months ago and go back from there.",
+    "backfill_months": 12,
+    "publication_lag_months": 2
+  },
+
+  "storage": {
+    "_comment_storage": "Platform specific file paths. The notebooks detect whether they are running on Fabric or Databricks and pick the right block. Table names are shared: on Fabric they become Lakehouse tables, on Databricks they become Unity Catalog managed tables.",
+    "fabric": {
+      "bronze_path": "Files/bronze/crime",
+      "config_path": "Files/config/pipeline_config.json"
+    },
+    "databricks": {
+      "_comment": "Uses a Unity Catalog Volume. Create it once in the Catalog UI: catalog 'workspace', schema 'default', volume 'bristol'. Then upload this config file into it under a config/ folder.",
+      "bronze_path": "/Volumes/workspace/default/bristol/bronze/crime",
+      "config_path": "/Volumes/workspace/default/bristol/config/pipeline_config.json"
+    },
+    "silver_table": "silver_crime",
+    "gold_fact_table": "gold_fact_crime",
+    "gold_dim_date": "gold_dim_date",
+    "gold_dim_category": "gold_dim_category",
+    "gold_monthly_agg": "gold_crime_monthly_by_area"
+  },
+
+  "data_quality": {
+    "_comment_dq": "Thresholds the quality gate enforces. Tune these once you know your data volumes.",
+    "min_rows_per_month": 500,
+    "max_null_rate_location": 0.05,
+    "max_null_rate_category": 0.0,
+    "expected_categories": [
+      "anti-social-behaviour", "bicycle-theft", "burglary",
+      "criminal-damage-arson", "drugs", "other-theft",
+      "possession-of-weapons", "public-order", "robbery",
+      "shoplifting", "theft-from-the-person", "vehicle-crime",
+      "violent-crime", "other-crime"
+    ]
+  }
+}
