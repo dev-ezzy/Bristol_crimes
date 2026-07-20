@@ -1,8 +1,6 @@
 # Bristol Crime & Safety Analytics Pipeline
 
-An end to end data engineering project built on Microsoft Fabric, ingesting street level crime data for Bristol from the official UK Police open data API, transforming it through a medallion architecture (Bronze, Silver, Gold), and serving it to Power BI dashboards.
-
-Built to mirror the exact stack used by Bristol City Council's Data and Insight Team: Azure Fabric, Delta Lake, scheduled pipelines, data quality checks, and Power BI reporting.
+An end to end data engineering project ingesting street level crime data for Bristol from the official UK Police open data API, transforming it through a medallion architecture (Bronze, Silver, Gold) with a data quality gate, and serving a published interactive dashboard. Built and running on Databricks (Free Edition, serverless); designed to be platform portable, with the same notebooks verified against the Azure Fabric API surface — the stack used by Bristol City Council's Data and Insight Team.
 
 ---
 
@@ -36,7 +34,7 @@ UK Police API (data.police.uk)
 │  dim_category + monthly ward aggregates         │
 └─────────────────────────────────────────────────┘
         ▼
-   Power BI (DirectLake semantic model)
+   AI/BI Dashboard (Databricks) · Power BI portable
 ```
 
 ## Data source
@@ -66,7 +64,7 @@ bristol-crime-pipeline/
 ├── pipeline/
 │   └── fabric_pipeline_guide.md  Wiring notebooks into a scheduled pipeline
 └── powerbi/
-    └── dashboard_setup.md        Semantic model + dashboard build guide
+    └── dashboard_setup.md       AI/BI Dashboard (Databricks) · Power BI portable
 ```
 
 ## Quick start (Fabric)
