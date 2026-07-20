@@ -1,5 +1,7 @@
 # Bristol Crime & Safety Analytics Pipeline
 
+![Bristol Crime & Safety dashboard](screenshots/dashboard.png)
+
 An end to end data engineering project ingesting street level crime data for Bristol from the official UK Police open data API, transforming it through a medallion architecture (Bronze, Silver, Gold) with a data quality gate, and serving a published interactive dashboard. Built and running on Databricks (Free Edition, serverless); designed to be platform portable, with the same notebooks verified against the Azure Fabric API surface — the stack used by Bristol City Council's Data and Insight Team.
 
 ---
