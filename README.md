@@ -90,12 +90,4 @@ The PySpark code is identical. Only the storage paths change: swap the Fabric La
 - **Silver** is a single cleaned version of the truth that any downstream consumer can trust.
 - **Gold** is shaped for the questions the business asks, so Power BI stays fast and simple.
 
-This is the pattern Fabric is designed around, and the vocabulary interviewers expect.
-
-## Talking points for interviews
-
-- Ingests from the same upstream source Bristol City Council uses for its street crime dataset
-- Scheduled, parameterised, idempotent loads (re running a month never duplicates data)
-- Data quality gate that fails the pipeline before bad data reaches reporting
-- Star schema Gold layer consumed by Power BI in DirectLake mode
-- Privacy aware: understands and can explain the police API's location anonymisation
+This is the pattern Fabric is designed around.
